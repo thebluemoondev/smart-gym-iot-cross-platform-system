@@ -1,0 +1,41 @@
+services:
+  db:
+    image: mcr.microsoft.com/azure-sql-edge
+    container_name: gym-db
+    restart: always
+    environment:
+      - TZ=Asia/Ho_Chi_Minh
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=ThanhGym@2026_Smart
+    ports:
+      - "1433:1433"
+    # LƯU TRỮ DỮ LIỆU BỀN VỮNG
+    volumes:
+      - gym_sql_data:/var/opt/mssql
+
+  api:
+    build: .
+    container_name: gym-api
+    restart: always
+    ports:
+      - "5266:5266"
+    environment:
+      - TZ=Asia/Ho_Chi_Minh
+      - ASPNETCORE_URLS=http://+:5266
+      # Kết nối vào database 'master' trước vì database mới chưa được tạo
+      - ConnectionStrings__DefaultConnection=Server=db;Database=gym-db;User Id=sa;Password=ThanhGym@2026_Smart;TrustServerCertificate=True
+    depends_on:
+      - db
+
+  web:
+    build: ./frontend
+    container_name: gym-web
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+
+# Khai báo Volume ở cuối file
+volumes:
+  gym_sql_data:
