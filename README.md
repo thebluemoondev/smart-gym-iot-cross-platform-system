@@ -1,11 +1,11 @@
-# 🏋️‍♂️ Smart Gym Management System (IoT & Cloud Integration)
+# 🏋️‍♂️ Smart Gym Management System 
 
 ![GitHub top language](https://img.shields.io/github/languages/top/thebluemoondev/SmartGym-Management?style=for-the-badge)
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 ![.Net](https://img.shields.io/badge/.NET-8.0-512BD4?style=for-the-badge&logo=.net&logoColor=white)
 ![Raspberry Pi](https://img.shields.io/badge/-Raspberry%20Pi-C51A4A?style=for-the-badge&logo=Raspberry-Pi)
 
-Hệ thống quản lý phòng Gym thông minh tích hợp công nghệ **IoT (RFID RC522)**, Backend **.NET 8** và triển khai trên hạ tầng **Raspberry Pi 5** thông qua **Docker**. Dự án giải quyết bài toán kiểm soát ra vào thời gian thực và quản lý chỉ số sức khỏe hội viên.
+Hệ thống quản lý phòng Gym thông minh tích hợp công nghệ **IoT (RFID RC522)**, Backend **.NET 10** và triển khai trên hạ tầng **Raspberry Pi 5** thông qua **Docker**. Dự án giải quyết bài toán kiểm soát ra vào thời gian thực và quản lý chỉ số sức khỏe hội viên.
 
 ---
 
