@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Hội viên - Smart Gym</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="login-page" style="align-items: flex-start; padding-top: 50px;">
+    <div class="container" style="width: 90%; max-width: 800px; margin: 0 auto;">
+
+        <div class="login-box" style="max-width: 100%; text-align: left; margin-bottom: 30px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2 style="margin-bottom: 0;">CHÀO, <span id="memberName" style="color: #38bdf8;">...</span></h2>
+                <div>
+                    <button onclick="openEditProfile()" style="background:none; border:none; color:#38bdf8; cursor:pointer; margin-right:15px;"><i class="fas fa-user-edit"></i> Sửa hồ sơ</button>
+                    <button onclick="logout()" style="background:none; border:none; color:#ff3e3e; cursor:pointer;"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
+                </div>
+            </div>
+            <hr style="border: 0.5px solid #334155; margin: 20px 0;">
+
+            <div id="packageStatus">
+                <p>Đang tải thông tin gói tập...</p>
+            </div>
+        </div>
+
+        <div class="card" style="background: rgba(17, 24, 39, 0.95); border: 1px solid #334155; padding: 20px; border-radius: 16px;">
+            <h3 style="font-family: 'Oswald'; color: #38bdf8; margin-bottom: 20px;">LỊCH SỬ TẬP LUYỆN</h3>
+            <table style="width: 100%; border-collapse: collapse; color: #cbd5e1;">
+                <thead>
+                    <tr style="border-bottom: 1px solid #334155; color: #38bdf8;">
+                        <th style="padding: 10px; text-align: left;">Ngày/Giờ</th>
+                        <th style="padding: 10px; text-align: left;">Kết quả</th>
+                    </tr>
+                </thead>
+                <tbody id="historyBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="editProfileModal" class="modal-overlay" style="display: none;">
+        <div class="login-box modal-box" style="max-width: 400px; margin: auto;">
+            <h2 style="color: #38bdf8;">CẬP NHẬT HỒ SƠ</h2>
+            <div class="input-group">
+                <label style="color: #94a3b8; display: block; text-align: left; margin-bottom: 5px;">Họ và tên</label>
+                <input type="text" id="editFullName" style="width: 100%; padding: 10px; margin-bottom: 15px;">
+
+                <label style="color: #94a3b8; display: block; text-align: left; margin-bottom: 5px;">Mật khẩu mới (để trống nếu không đổi)</label>
+                <input type="password" id="editPassword" style="width: 100%; padding: 10px; margin-bottom: 20px;">
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button onclick="updateProfile()" class="btn-full">LƯU THAY ĐỔI</button>
+                <button onclick="closeModal()" class="btn-full" style="background: #334155;">HỦY</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const API_URL = "https://api.thanhchinh.io.vn/api";
+        const userId = localStorage.getItem('userId');
+        const fullName = localStorage.getItem('userName');
+
+        document.getElementById('memberName').innerText = fullName;
+
+        async function loadMemberData() {
+            try {
+                const resUser = await axios.get(`${API_URL}/Users/${userId}`);
+                const user = resUser.data;
+                const statusDiv = document.getElementById('packageStatus');
+
+                if (user.activePackage) {
+                    statusDiv.innerHTML = `
+                        <div style="background: rgba(56, 189, 248, 0.1); padding: 15px; border-radius: 8px; border-left: 4px solid #38bdf8;">
+                            <h4 style="color: #38bdf8;">Gói đang sử dụng: ${user.activePackage.packageName}</h4>
+                            <p style="margin-top: 5px;">Ngày hết hạn: <b style="color: #fff;">${new Date(user.activePackage.expiryDate).toLocaleDateString('vi-VN')}</b></p>
+                        </div>
+                    `;
+                } else {
+                    statusDiv.innerHTML = `
+                        <div style="background: rgba(239, 68, 68, 0.1); padding: 15px; border-radius: 8px; border-left: 4px solid #ef4444;">
+                            <p style="color: #ef4444;">Bạn chưa đăng ký gói tập hoặc gói đã hết hạn.</p>
+                            <small style="color: #94a3b8;">Vui lòng liên hệ Admin để gia hạn.</small>
+                        </div>
+                    `;
+                }
+
+                const resHistory = await axios.get(`${API_URL}/Rfid/history/${userId}`);
+                document.getElementById('historyBody').innerHTML = resHistory.data.map(h => `
+                    <tr style="border-bottom: 1px solid #1e293b;">
+                        <td style="padding: 10px;">${new Date(h.checkInTime).toLocaleString('vi-VN')}</td>
+                        <td style="padding: 10px; color: ${h.status === 'Thành công' ? '#10b981' : '#ef4444'}">${h.status}</td>
+                    </tr>
+                `).join('');
+            } catch (e) { console.error(e); }
+        }
+
+        function openEditProfile() {
+            document.getElementById('editProfileModal').style.display = 'flex';
+            document.getElementById('editFullName').value = localStorage.getItem('userName');
+        }
+
+        function closeModal() {
+            document.getElementById('editProfileModal').style.display = 'none';
+        }
+
+        async function updateProfile() {
+            const newName = document.getElementById('editFullName').value;
+            const newPass = document.getElementById('editPassword').value;
+
+            try {
+                await axios.put(`${API_URL}/Users/${userId}`, {
+                    id: parseInt(userId),
+                    fullName: newName,
+                    password: newPass || undefined,
+                    isActive: true,
+                    role: "Member"
+                });
+
+                localStorage.setItem('userName', newName);
+                Swal.fire('Thành công', 'Hồ sơ đã được cập nhật!', 'success').then(() => {
+                    location.reload();
+                });
+            } catch (e) {
+                Swal.fire('Lỗi', 'Không thể cập nhật hồ sơ!', 'error');
+            }
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+
+        if(!userId) window.location.href = 'index.html';
+        else loadMemberData();
+    </script>
+</body>
+</html>

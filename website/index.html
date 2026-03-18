@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Thành Gym & Fitness - Công nghệ dẫn đầu</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">THANH<span>GYM</span></div>
+        <ul class="nav-links">
+            <li><a href="#home" class="btn-login">Trang chủ</a></li>
+            <li><a href="#packages" class="btn-login">Gói tập</a></li>
+            <li><a href="login.html" class="btn-login">Đăng nhập</a></li>
+            <li><a href="register.html" class="btn-login">Đăng ký</a></li>
+        </ul>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>WORK HARDER</h1>
+            <p>Hãy làm việc chăm chỉ hơn với chúng tôi.</p>
+            <a href="#packages" class="btn-cta">Xem các gói tập</a>
+        </div>
+    </section>
+
+    <section id="packages" class="packages-section">
+        <h2 class="section-title">CÁC GÓI TẬP HIỆN CÓ</h2>
+        <div class="package-container" id="publicPackageList"></div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const API_URL = "https://api.thanhchinh.io.vn/api"
+        async function loadPackages() {
+            const res = await axios.get(`${API_URL}/GymPackage`);
+            document.getElementById('publicPackageList').innerHTML = res.data.map(p => `
+                <div class="package-card">
+                    <h3>${p.name}</h3>
+                    <div class="price">${p.price.toLocaleString()} VNĐ</div>
+                    <p>Thời hạn: ${p.durationDays} ngày</p>
+                    <a href="register.html" class="btn-select" style="display: block; text-decoration: none; text-align: center;"> ĐĂNG KÝ NGAY </a>
+                </div>
+            `).join('');
+        }
+        loadPackages();
+    </script>
+</body>
+</html>

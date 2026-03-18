@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký thành viên - Smart Gym</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="login-page">
+    <div class="login-box">
+        <h2>TẠO TÀI KHOẢN MỚI</h2>
+        <form id="registerForm">
+            <input type="text" id="regFullName" placeholder="Họ và tên" required>
+
+            <input type="text" id="regUsername" placeholder="Tên đăng nhập" required>
+
+            <input type="password" id="regPassword" placeholder="Mật khẩu" required>
+
+            <input type="text" id="regPhone" placeholder="Số điện thoại">
+
+            <input type="text" id="regRfid" placeholder="Mã thẻ RFID (Nếu có)">
+
+            <button type="submit" class="btn-full">ĐĂNG KÝ NGAY</button>
+
+            <a href="login.html" class="back-link">Đã có tài khoản? Đăng nhập tại đây</a>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const userData = {
+                fullName: document.getElementById('regFullName').value,
+                username: document.getElementById('regUsername').value,
+                password: document.getElementById('regPassword').value,
+                phoneNumber: document.getElementById('regPhone').value || null,
+                rfidCardGuid: document.getElementById('regRfid').value || null,
+                role: "Member",
+                isActive: true
+            };
+
+            const API_URL = "https://api.thanhchinh.io.vn/api";
+
+            try {
+                Swal.fire({
+                    title: 'Đang xử lý...',
+                    allowOutsideClick: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+
+                const res = await axios.post(`${API_URL}/Auth/register`, userData);
+
+                Swal.fire({
+                    title: 'Thành công!',
+                    text: res.data.message,
+                    icon: 'success',
+                    confirmButtonText: 'Đăng nhập ngay'
+                }).then(() => {
+                    window.location.href = 'login.html';
+                });
+
+            } catch (err) {
+                console.error(err);
+                const msg = err.response?.data?.message || "Lỗi kết nối máy chủ!";
+                Swal.fire('Thất bại', msg, 'error');
+            }
+        });
+    </script>
+</body>
+</html>

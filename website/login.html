@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng nhập - Smart Gym</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-page">
+    <div class="login-box">
+        <h2>ĐĂNG NHẬP HỆ THỐNG</h2>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Tên đăng nhập" required>
+            <input type="password" id="password" placeholder="Mật khẩu" required>
+            <button type="submit" class="btn-full">ĐĂNG NHẬP</button>
+            <a href="register.html" class="back-link">Chưa có tài khoản? Đăng ký ngay</a>
+            <p id="error-msg" style="color: #ff3e3e; margin-top: 10px; display: none;"></p>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const API_URL = "https://api.thanhchinh.io.vn/api";
+            const errorMsg = document.getElementById('error-msg');
+            errorMsg.style.display = 'none';
+
+            try {
+                const res = await axios.post(`${API_URL}/Auth/login`, {
+                    username: document.getElementById('username').value,
+                    password: document.getElementById('password').value
+                });
+
+                const data = res.data;
+                const role = data.role || data.Role;
+                const fullName = data.fullName || data.FullName;
+                const userId = data.userId || data.UserId;
+
+                if (!role) {
+                    Swal.fire('Lỗi!', 'Tài khoản chưa được phân quyền!', 'error');
+                    return;
+                }
+
+                localStorage.setItem('userRole', role);
+                localStorage.setItem('userName', fullName);
+                localStorage.setItem('userId', userId);
+
+                Swal.fire({
+                    title: 'Thành công!',
+                    text: `Chào ${role}: ${fullName}`,
+                    icon: 'success',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+
+                setTimeout(() => {
+                    const r = role.toUpperCase();
+                    if (r === "ADMIN") {
+                        window.location.href = 'admin.html';
+                    } else if (r === "PT") {
+                        window.location.href = 'pt-dashboard.html';
+                    } else {
+                        window.location.href = 'member.html';
+                    }
+                }, 1500);
+
+            } catch (err) {
+                console.error(err);
+                errorMsg.innerText = err.response?.data?.message || "Sai tài khoản hoặc mật khẩu!";
+                errorMsg.style.display = 'block';
+                Swal.fire('Thất bại', errorMsg.innerText, 'error');
+            }
+        });
+    </script>
+</body>
+</html>

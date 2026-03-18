@@ -1,0 +1,252 @@
+/* Font & Reset */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Roboto', sans-serif; background: #000; color: #fff; scroll-behavior: smooth; }
+
+/* Navbar */
+.navbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 10%; background: rgba(0,0,0,0.8); position: fixed; width: 100%; z-index: 1000;
+}
+.logo { font-family: 'Oswald', sans-serif; font-size: 28px; font-weight: bold; letter-spacing: 2px; }
+.logo span { color: #ff3e3e; }
+.nav-links { display: flex; list-style: none; align-items: center; }
+.nav-links li a { color: #fff; text-decoration: none; margin: 0 20px; font-weight: bold; transition: 0.3s; }
+.nav-links li a:hover { color: #ff3e3e; }
+.btn-login { background: #ff3e3e; padding: 10px 20px; border-radius: 5px; }
+.btn-register { background: #3eb5ff; padding: 10px 20px; border-radius: 5px; }
+
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    background-size: cover; background-position: center;
+    display: flex; align-items: center; justify-content: center; text-align: center;
+}
+.hero h1 { font-family: 'Oswald', sans-serif; font-size: 80px; letter-spacing: 5px; margin-bottom: 20px; }
+.hero p { font-size: 20px; max-width: 700px; margin-bottom: 30px; opacity: 0.8; }
+.btn-cta { background: #ff3e3e; color: #fff; text-decoration: none; padding: 15px 40px; font-weight: bold; font-size: 18px; border-radius: 50px; }
+
+/* Packages Card */
+.packages-section { padding: 100px 10%; background: #111; text-align: center; }
+.section-title { font-family: 'Oswald', sans-serif; font-size: 40px; margin-bottom: 50px; }
+.package-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+.package-card { background: #222; padding: 40px; border-radius: 15px; border: 1px solid #333; transition: 0.3s; }
+.package-card:hover { transform: translateY(-10px); border-color: #ff3e3e; }
+.price { font-size: 48px; font-weight: bold; color: #ff3e3e; }
+.package-card ul { list-style: none; margin: 25px 0; text-align: left; }
+.package-card li { margin-bottom: 10px; opacity: 0.7; }
+.package-card li i { color: #ff3e3e; margin-right: 10px; }
+.btn-select { width: 100%; padding: 12px; background: transparent; border: 2px solid #ff3e3e; color: #fff; font-weight: bold; cursor: pointer; }
+.btn-select:hover { background: #ff3e3e; }
+
+/* Login Page */
+.login-page { display: flex; align-items: center; justify-content: center; height: 100vh; background: #000; }
+.login-box { background: #111; padding: 50px; border-radius: 10px; width: 400px; text-align: center; box-shadow: 0 0 20px rgba(255,62,62,0.2); }
+.input-group input { width: 100%; padding: 15px; margin-bottom: 20px; background: #222; border: 1px solid #333; color: #fff; outline: none; }
+.btn-full { width: 100%; padding: 15px; background: #ff3e3e; border: none; color: #fff; font-weight: bold; cursor: pointer; }
+.back-link { display: block; margin-top: 20px; color: #777; text-decoration: none; }
+
+/* Trang Login - Giao diện tập trung */
+.login-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100vw;
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+                url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1350&q=80');
+    background-size: cover;
+    background-position: center;
+    margin: 0;
+}
+
+.login-box {
+    background: rgba(17, 24, 39, 0.95); /* Màu tối sang trọng */
+    padding: 40px;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(56, 189, 248, 0.2); /* Đổ bóng xanh neon nhẹ */
+    border: 1px solid #334155;
+    backdrop-filter: blur(10px); /* Hiệu ứng kính mờ */
+}
+
+.login-box h2 {
+    font-family: 'Oswald', sans-serif;
+    color: #38bdf8;
+    font-size: 28px;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 20px;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.login-box input:focus {
+    border-color: #38bdf8;
+    outline: none;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+}
+
+.btn-full {
+    width: 100%;
+    padding: 14px;
+    background: #38bdf8;
+    border: none;
+    color: #0f172a;
+    font-weight: bold;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-full:hover {
+    background: #0ea5e9;
+    transform: translateY(-2px);
+}
+
+.back-link {
+    display: block;
+    margin-top: 20px;
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.back-link:hover {
+    color: #38bdf8;
+}
+
+/* --- Bổ sung cho Admin Dashboard --- */
+
+.admin-body {
+    display: flex;
+    min-height: 100vh;
+    background: #000; /* Giữ tông nền đen chủ đạo */
+    margin: 0;
+}
+
+/* Sidebar phong cách tối giản */
+.sidebar {
+    width: 260px;
+    background: rgba(17, 24, 39, 0.95);
+    border-right: 1px solid #334155;
+    position: fixed;
+    height: 100vh;
+    padding: 30px 0;
+    backdrop-filter: blur(10px);
+}
+
+.sidebar .logo {
+    padding: 0 25px;
+    margin-bottom: 40px;
+}
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-item {
+    padding: 15px 25px;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.nav-item i {
+    margin-right: 15px;
+    font-size: 18px;
+}
+
+.nav-item:hover {
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.1);
+}
+
+.nav-item.active {
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.15);
+    border-right: 4px solid #38bdf8;
+}
+
+/* Nội dung chính */
+.main-content {
+    margin-left: 260px;
+    flex: 1;
+    padding: 40px;
+}
+
+.main-content header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.main-content h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 32px;
+    letter-spacing: 2px;
+    color: #38bdf8;
+}
+
+.user-badge {
+    padding: 10px 20px;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 50px;
+    font-size: 14px;
+}
+
+/* Bảng dữ liệu phong cách Dark Mode */
+.card {
+    background: rgba(17, 24, 39, 0.8);
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 20px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table thead th {
+    text-align: left;
+    padding: 15px;
+    color: #38bdf8;
+    font-family: 'Oswald', sans-serif;
+    border-bottom: 1px solid #334155;
+    text-transform: uppercase;
+}
+
+table tbody td {
+    padding: 15px;
+    border-bottom: 1px solid #1e293b;
+    color: #cbd5e1;
+}
+
+table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* Badge trạng thái cho IoT/Checkin */
+.status-valid { color: #10b981; font-weight: bold; }
+.status-invalid { color: #ef4444; font-weight: bold; }

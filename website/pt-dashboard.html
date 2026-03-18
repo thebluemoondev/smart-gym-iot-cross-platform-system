@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>PT Dashboard - Smart Gym</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="admin-body">
+    <div class="sidebar">
+        <div class="logo">PT<span>SPACE</span></div>
+        <nav>
+            <div class="nav-item active"><i class="fas fa-user-friends"></i> Khách hàng</div>
+            <div class="nav-item" onclick="logout()" style="margin-top: 50px; color: #ff3e3e;"><i class="fas fa-sign-out-alt"></i> Đăng xuất</div>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1>Quản lý Hội viên PT</h1>
+            <div class="user-badge">PT: <span id="ptName"></span></div>
+        </header>
+
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Hội viên</th>
+                        <th>Username</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody id="memberTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="indexModal" class="modal-overlay" style="display: none;">
+        <div class="login-box modal-box">
+            <h2>CHỈ SỐ SỨC KHỎE</h2>
+            <p id="memberNameLabel" style="color: #38bdf8;"></p>
+            <input type="hidden" id="selectedUserId">
+            <input type="number" id="weight" placeholder="Cân nặng (kg)">
+            <input type="number" id="height" placeholder="Chiều cao (cm)">
+            <input type="text" id="note" placeholder="Ghi chú bài tập">
+            <button onclick="saveBodyIndex()" class="btn-full">LƯU CHỈ SỐ</button>
+            <button onclick="closeModal()" class="btn-full" style="background:#334155; margin-top:10px;">ĐÓNG</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const API_URL = "https://api.thanhchinh.io.vn/api";
+        document.getElementById('ptName').innerText = localStorage.getItem('userName');
+
+        async function loadMembers() {
+            try {
+                const res = await axios.get(`${API_URL}/PT/my-members`);
+                document.getElementById('memberTableBody').innerHTML = res.data.map(m => `
+                    <tr>
+                        <td>${m.fullName}</td>
+                        <td>${m.username}</td>
+                        <td><span class="${m.isActive ? 'status-valid' : 'status-invalid'}">${m.isActive ? 'Hoạt động' : 'Khóa'}</span></td>
+                        <td>
+                            <button class="btn-edit-table" onclick="openIndexModal(${m.id}, '${m.fullName}')"><i class="fas fa-heartbeat"></i> Đo chỉ số</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (e) { console.error(e); }
+        }
+
+        function openIndexModal(id, name) {
+            document.getElementById('selectedUserId').value = id;
+            document.getElementById('memberNameLabel').innerText = "Hội viên: " + name;
+            document.getElementById('indexModal').style.display = 'flex';
+        }
+
+        function closeModal() { document.getElementById('indexModal').style.display = 'none'; }
+
+        async function saveBodyIndex() {
+            const data = {
+                userId: parseInt(document.getElementById('selectedUserId').value),
+                weight: parseFloat(document.getElementById('weight').value),
+                height: parseFloat(document.getElementById('height').value),
+                note: document.getElementById('note').value
+            };
+            try {
+                await axios.post(`${API_URL}/PT/update-index`, data);
+                Swal.fire('Thành công', 'Đã cập nhật chỉ số cho hội viên!', 'success');
+                closeModal();
+            } catch (e) { Swal.fire('Lỗi', 'Không thể lưu!', 'error'); }
+        }
+
+        function logout() { localStorage.clear(); window.location.href = 'index.html'; }
+        window.onload = loadMembers;
+    </script>
+</body>
+</html>
